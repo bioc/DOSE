@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.2.1
+------------------------
+ o update color scheme of cnetplot <2012-04-10, Tue>
+ o bug fixed of combineScore function for DO semantic similarity matrix
+   which containing NA rows of NA coloumns <2012-04-20, Fri>
+
 CHANGES IN VERSION 1.1.12
 ------------------------
  o implement barplot for enrichResult <2012-03-18, Sun>
