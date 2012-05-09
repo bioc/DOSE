@@ -1,10 +1,10 @@
-##' convert a list of gene IDs to igraph object.
+##' convert a list of gene IDs to igraph0 object.
 ##'
 ##'
-##' @title convert gene IDs to igraph object
+##' @title convert gene IDs to igraph0 object
 ##' @param inputList a list of gene IDs
-##' @return a igraph object.
-##' @importFrom igraph graph.data.frame
+##' @return a igraph0 object.
+##' @importFrom igraph0 graph.data.frame
 ##' @author Guangchuang Yu \url{http://ygc.name}
 list2graph <- function(inputList) {
     x <- data.frame()
@@ -29,17 +29,17 @@ list2graph <- function(inputList) {
 ##' @param pvalue pvalue
 ##' @param logFC  log fold Change
 ##' @param output output type
-##' @return plotted igraph object.
+##' @return plotted igraph0 object.
 ##' @importFrom scales cscale
 ##' @importFrom scales seq_gradient_pal
-##' @importFrom igraph tkplot
-##' @importFrom igraph plot.igraph
-##' @importFrom igraph V
-##' @importFrom igraph "V<-"
-##' @importFrom igraph E
-##' @importFrom igraph "E<-"
-##' @importFrom igraph degree
-##' @importFrom igraph layout.fruchterman.reingold
+##' @importFrom igraph0 tkplot
+##' @importFrom igraph0 plot.igraph
+##' @importFrom igraph0 V
+##' @importFrom igraph0 "V<-"
+##' @importFrom igraph0 E
+##' @importFrom igraph0 "E<-"
+##' @importFrom igraph0 degree
+##' @importFrom igraph0 layout.fruchterman.reingold
 ##' @export
 ##' @author Guangchuang Yu \url{http://ygc.name}
 cnetplot <- function(inputList, categorySize="geneNum",

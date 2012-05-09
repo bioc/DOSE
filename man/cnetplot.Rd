@@ -15,12 +15,12 @@
 
   \item{pvalue}{pvalue}
 
-  \item{logFC}{logFC}{log fold Change}
+  \item{logFC}{log fold Change}
 
   \item{output}{output type}
 }
 \value{
-  plotted igraph object.
+  plotted igraph0 object.
 }
 \description{
   plot function of gene Concept Net.

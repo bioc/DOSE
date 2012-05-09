@@ -17,7 +17,7 @@ Imports:
     AnnotationDbi,
     DO.db,
     org.Hs.eg.db,
-    igraph,
+    igraph0,
     scales,
     ggplot2,
     graphics
