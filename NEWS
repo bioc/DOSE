@@ -4,7 +4,8 @@ CHANGES IN VERSION 1.2.1
  o bug fixed of combineScore function for DO semantic similarity matrix
    which containing NA rows of NA coloumns <2012-04-20, Fri>
  o change dependency from igraph to igraph0, 
-   for igraph's next release is not backward compatible <2012-05-09, Wed>  
+   for igraph's next release is not backward compatible <2012-05-09, Wed>
+ o bug fixed of setReadable method <2012-05-15, Tue>   
 
 CHANGES IN VERSION 1.1.12
 ------------------------
