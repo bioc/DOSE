@@ -130,7 +130,7 @@ enrich.internal <- function(gene,
     Description <- TERM2NAME(qTermID, organism)
 
     if (length(qTermID) != length(Description)) {
-        idx <- qTermID %in% names(tt)
+        idx <- qTermID %in% names(Description)
         Over <- Over[idx,] 
     }
     Over$Description <- Description
