@@ -91,9 +91,9 @@ gsea <- function(geneList,
         } else if ( observedScore[i] == 0 ) {
             1
         } else if ( observedScore[i] > 0 ) {
-            sum(permScores[i, ] > observedScore[i]) / nPerm
+            (sum(permScores[i, ] >= observedScore[i]) +1) / (nPerm+1)
         } else { # observedScore[i] < 0
-            sum(permScores[i, ] < observedScore[i]) / nPerm
+            (sum(permScores[i, ] <= observedScore[i]) +1) / (nPerm+1)
         }
     })
     p.adj <- p.adjust(pvals, method=pAdjustMethod)
@@ -139,11 +139,12 @@ gsea <- function(geneList,
         print("done...")
 
     new("gseaResult",
-        result = res,
-        geneSets = geneSets,
-        geneList = geneList,
+        result     = res,
+        setType    = setType,
+        geneSets   = geneSets,
+        geneList   = geneList,
         permScores = permScores,
-        params = params
+        params     = params
         )
 }
 
