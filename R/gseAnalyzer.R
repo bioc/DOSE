@@ -9,6 +9,7 @@
 ##'
 ##' @docType class
 ##' @slot result GSEA anaysis
+##' @slot setType set type
 ##' @slot geneSets geneSets
 ##' @slot geneList order rank geneList
 ##' @slot permScores permutation scores
@@ -19,11 +20,12 @@
 ##' @keywords classes
 setClass("gseaResult",
          representation=representation(
-         result = "data.frame",
-         geneSets = "list",
-         geneList = "numeric",
-         permScores = "matrix",
-         params = "list"
+             result     = "data.frame",
+             setType    = "character",
+             geneSets   = "list",
+             geneList   = "numeric",
+             permScores = "matrix",
+             params     = "list"
          )
          )
 
