@@ -18,7 +18,7 @@ This class represents the result of GSEA analysis
 \describe{
 \item{\code{result}}{GSEA anaysis}
 
-\item{\code{setType}}{set type}
+\item{\code{setType}}{setType}
 
 \item{\code{geneSets}}{geneSets}
 

@@ -10,7 +10,7 @@
 ##' @importFrom igraph delete.edges
 ##' @export
 ##' @author G Yu
-enrichMap <- function(x, n = 50, fixed=TRUE, ...) {
+enrichMap <- function(x, n = 50, fixed=TRUE,  ...) {
     if (is(x, "gseaResult")) {
         geneSets <- x@geneSets
     }
@@ -50,7 +50,7 @@ enrichMap <- function(x, n = 50, fixed=TRUE, ...) {
     
     V(g)$color <- cols[sapply(pvalue, getIdx, min(pvalue), max(pvalue))]
     ## seq_gradient_pal("red", "grey")(pvalue[idx])
-    netplot(g, vertex.label.font=1, vertex.label.color="black", fixed=fixed, ...)
+    netplot(g, vertex.label.font=vertex.label.font, vertex.label.color="black", fixed=fixed, ...)
 }
 
 overlap_ratio <- function(x, y) {

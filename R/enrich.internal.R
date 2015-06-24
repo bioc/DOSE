@@ -59,23 +59,26 @@ enrich.internal <- function(gene,
     }
 
     qTermID2ExtID <- sapply(qTermID2ExtID, intersect, extID)
-    idx <- sapply(qTermID2ExtID, length) > minGSSize
-    if (sum(idx) == 0)
-        return (NULL)
-
-    qTermID2ExtID <- qTermID2ExtID[idx]
 
     ## Term ID annotate query external ID
     qTermID <- unique(names(qTermID2ExtID))
 
-    ## prepare parameter for hypergeometric test
-    k <- sapply(qTermID2ExtID, length)
-    k <- k[qTermID]
-
     class(qTermID) <- ont
     termID2ExtID <- TERMID2EXTID(qTermID, organism, ...)
     termID2ExtID <- sapply(termID2ExtID, intersect, extID)
+    
+    idx <- sapply(termID2ExtID, length) > minGSSize
+    if (sum(idx) == 0)
+        return (NULL)
 
+    termID2ExtID <- termID2ExtID[idx]
+    qTermID2ExtID <- qTermID2ExtID[idx]
+    qTermID <- unique(names(qTermID2ExtID))
+    
+    ## prepare parameter for hypergeometric test
+    k <- sapply(qTermID2ExtID, length)
+    k <- k[qTermID]
+    
     if (length(qTermID)== 1) {
         M <- nrow(termID2ExtID)
     } else {
@@ -156,15 +159,17 @@ enrich.internal <- function(gene,
 
     row.names(Over) <- category
 
-
+    
     x <- new("enrichResult",
-             result = Over,
-             pvalueCutoff=pvalueCutoff,
-             pAdjustMethod=pAdjustMethod,
-             organism = as.character(organism),
-             ontology = as.character(ont),
-             gene = as.character(gene),
-             geneInCategory = qTermID2ExtID[category]
+             result         = Over,
+             pvalueCutoff   = pvalueCutoff,
+             pAdjustMethod  = pAdjustMethod,
+             organism       = as.character(organism),
+             ontology       = as.character(ont),
+             gene           = as.character(gene),
+             universe       = extID,
+             geneInCategory = qTermID2ExtID[category],
+             geneSets       = termID2ExtID
              )
     if(readable)
         x <- setReadable(x)
@@ -172,116 +177,3 @@ enrich.internal <- function(gene,
     return (x)
 }
 
-##################
-##
-##     DO
-##
-##################
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method EXTID2TERMID DO
-##' @export
-EXTID2TERMID.DO <- function(gene, organism, ...) {
-    if(!exists("DOSEEnv")) .initial()
-    EG2ALLDO <- get("EG2ALLDO", envir=DOSEEnv)
-
-    ## query external ID to Ontology ID
-    qExtID2Term <- EG2ALLDO[gene]
-    len <- sapply(qExtID2Term, length)
-    notZero.idx <- len != 0
-    qExtID2Term <- qExtID2Term[notZero.idx]
-
-    return(qExtID2Term)
-}
-
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method TERMID2EXTID DO
-##' @export
-TERMID2EXTID.DO <- function(term, organism, ...) {
-    if(!exists("DOSEEnv")) .initial()
-    DO2ALLEG <- get("DO2ALLEG", envir=DOSEEnv)
-    res <- DO2ALLEG[term]
-    return(res)
-}
-
-
-##' @importMethodsFrom DO.db Term
-##' @method TERM2NAME DO
-##' @export
-TERM2NAME.DO <- function(term, organism, ...) {
-    desc = sapply(term, Term)
-    return(desc)
-}
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method ALLEXTID DO
-##' @export
-ALLEXTID.DO <- function(organism, ...) {
-    ##match.arg(organism, "human")
-    if(!exists("DOSEEnv")) .initial()
-    DO2ALLEG <- get("DO2ALLEG", envir=DOSEEnv)
-    res <- unique(unlist(DO2ALLEG))
-    return(res)
-}
-
-
-##################
-##
-##     DOLite
-##
-##################
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method EXTID2TERMID DOLite
-##' @export
-EXTID2TERMID.DOLite <- function(gene, organism, ...) {
-    if(!exists("DOSEEnv")) .initial()
-    EG2DOLite <- get("EG2DOLite", envir=DOSEEnv)
-
-    ## query external ID to Ontology ID
-    qExtID2Term= EG2DOLite[gene]
-    len <- sapply(qExtID2Term, length)
-    notZero.idx <- len != 0
-    qExtID2Term <- qExtID2Term[notZero.idx]
-
-    return(qExtID2Term)
-}
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method TERMID2EXTID DOLite
-##' @export
-TERMID2EXTID.DOLite <- function(term, organism, ...) {
-    if(!exists("DOSEEnv")) .initial()
-    DOLite2EG <- get("DOLite2EG", envir=DOSEEnv)
-    res <- DOLite2EG[term]
-    return(res)
-}
-
-
-##' @method TERM2NAME DOLite
-##' @export
-TERM2NAME.DOLite <- function(term, organism, ...) {
-    if(!exists("DOSEEnv")) .initial()
-    DOLiteTerm <- get("DOLiteTerm", envir=DOSEEnv)
-    desc = DOLiteTerm[term]
-    return(desc)
-}
-
-
-##' @importMethodsFrom AnnotationDbi get
-##' @importMethodsFrom AnnotationDbi exists
-##' @method ALLEXTID DOLite
-##' @export
-ALLEXTID.DOLite <- function(organism, ...) {
-    ##match.arg(organism, "human")
-    if(!exists("DOSEEnv")) .initial()
-    DOLite2EG <- get("DOLite2EG", envir=DOSEEnv)
-    res <- unique(unlist(DOLite2EG))
-    return(res)
-}

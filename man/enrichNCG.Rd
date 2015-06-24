@@ -26,7 +26,7 @@ enrichNCG(gene, pvalueCutoff = 0.05, pAdjustMethod = "BH", universe,
 A \code{enrichResult} instance
 }
 \description{
-NCG enrichment analysis
+Enrichment analysis based on the Network of Cancer Genes database (http://ncg.kcl.ac.uk/)
 }
 \details{
 given a vector of genes, this function will return the enrichment NCG

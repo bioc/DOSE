@@ -148,11 +148,11 @@ netplot <- function(g,
             lbs <- hist(fc, breaks=col.bin-1, plot=FALSE)$breaks
             col.legend <- get.col.scale(lbs)
 
-            x <- seq(from=legend.x, by=0.03, length.out=col.bin)
-            y <- rep(legend.y, col.bin)
+            x <- seq(from=legend.x, by=0.03, length.out=length(col.legend))
+            y <- rep(legend.y, length(col.legend))
             points(x, y, pch=15, col=col.legend, cex=2)
 
-            idx <- c(1, seq(4, col.bin-1, by=3), col.bin)
+            idx <- c(1, seq(4, length(col.legend)-1, by=3), length(col.legend))
             text(x=x[idx],
                  y=rep(legend.y-0.05, length(idx)),
                  label=lbs[idx],
@@ -176,7 +176,7 @@ netplot <- function(g,
 ##' plot function of gene Concept Net.
 ##'
 ##'
-##' @title plot gene net by categories
+##' @title cnetplot_internal
 ##' @param inputList a list of gene IDs
 ##' @param categorySize setting category size
 ##' @param showCategory number of categories to plot
@@ -184,13 +184,13 @@ netplot <- function(g,
 ##' @param foldChange  fold Change
 ##' @param fixed logical
 ##' @param DE.foldChange logical
-##' @param ... additional parameter
+##' @param ... additional parameters
 ##' @return plotted igraph object.
 ##' @importFrom igraph V
 ##' @importFrom igraph "V<-"
 ##' @importFrom igraph degree
 ##' @author Guangchuang Yu \url{http://ygc.name}
-cnetplot.internal <- function(inputList,
+cnetplot_internal <- function(inputList,
                               categorySize="geneNum",
                               showCategory=5,
                               pvalue=NULL,
@@ -249,10 +249,11 @@ cnetplot.internal <- function(inputList,
 
 
 cnetplot.enrichResult <- function(x,
-                                  showCategory=5,
-                                  categorySize="geneNum",
-                                  foldChange=NULL,
-                                  fixed=TRUE, ...) {
+                                  showCategory = 5,
+                                  categorySize = "geneNum",
+                                  foldChange   = NULL,
+                                  fixed        = TRUE,
+                                  ...) {
     res <- summary(x)
     gc <- x@geneInCategory
 
@@ -286,7 +287,7 @@ cnetplot.enrichResult <- function(x,
         names(foldChange) <- gn
     }
 
-    cnetplot.internal(inputList=gc,
+    cnetplot_internal(inputList=gc,
                       showCategory=showCategory,
                       categorySize=categorySize,
                       pvalue=pvalue,
