@@ -58,14 +58,14 @@ enrich.internal <- function(gene,
         extID <- intersect(extID, universe)
     }
 
-    qTermID2ExtID <- sapply(qTermID2ExtID, intersect, extID)
+    qTermID2ExtID <- lapply(qTermID2ExtID, intersect, extID)
 
     ## Term ID annotate query external ID
     qTermID <- unique(names(qTermID2ExtID))
 
     class(qTermID) <- ont
     termID2ExtID <- TERMID2EXTID(qTermID, organism, ...)
-    termID2ExtID <- sapply(termID2ExtID, intersect, extID)
+    termID2ExtID <- lapply(termID2ExtID, intersect, extID)
     
     idx <- sapply(termID2ExtID, length) > minGSSize
     if (sum(idx) == 0)
@@ -79,12 +79,9 @@ enrich.internal <- function(gene,
     k <- sapply(qTermID2ExtID, length)
     k <- k[qTermID]
     
-    if (length(qTermID)== 1) {
-        M <- nrow(termID2ExtID)
-    } else {
-        M <- sapply(termID2ExtID, length) 
-        M <- M[qTermID]
-    }
+    M <- sapply(termID2ExtID, length) 
+    M <- M[qTermID]
+    
 
     N <- rep(length(extID), length(M))
     ## n <- rep(length(gene), length(M)) ## those genes that have no annotation should drop.
