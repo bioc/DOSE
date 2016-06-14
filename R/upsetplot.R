@@ -1,21 +1,4 @@
-##' upsetplot
-##'
-##' 
-##' @title upsetplot
-##' @param x enrichResult object
-##' @param n number of categories
-##' @return plot 
-##' @author Guangchuang Yu
-##' @examples
-##' \dontrun{
-##' require(DOSE)
-##' data(geneList)
-##' de=names(geneList)[1:100]
-##' x <- enrichDO(de)
-##' upsetplot(x, 8)
-##' }
-##' @export
-upsetplot <- function(x, n=10) {
+upsetplot.enrichResult <- function(x, n=10) {
     if (! is(x, "enrichResult")) {
         stop("only 'enrichResult' object supported...")
     }

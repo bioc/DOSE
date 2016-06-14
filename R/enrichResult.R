@@ -218,3 +218,24 @@ setMethod("cnetplot", signature(x="enrichResult"),
                                     fixed=fixed, ...)
           }
           )
+
+##' upsetplot
+##'
+##' 
+##' @rdname upsetplot-methods
+##' @aliases upsetplot,enrichResult,ANY-method
+##' @param n number of categories to be plotted
+##' @author Guangchuang Yu
+##' @exportMethod upsetplot
+##' @examples
+##' \dontrun{
+##' require(DOSE)
+##' data(geneList)
+##' de=names(geneList)[1:100]
+##' x <- enrichDO(de)
+##' upsetplot(x, 8)
+##' }
+setMethod("upsetplot", signature(x="enrichResult"),
+          function(x, n=10, ...) {
+              upsetplot.enrichResult(x, n, ...)
+          })
