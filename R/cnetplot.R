@@ -278,7 +278,7 @@ cnetplot.enrichResult <- function(x,
 
     if (categorySize == "pvalue") {
         pvalue <- y$pvalue
-        names(pvalue) <- y$ID
+        names(pvalue) <- y$Description
     } else {
         pvalue <- NULL
     }
