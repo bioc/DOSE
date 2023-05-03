@@ -60,7 +60,10 @@ enricher_internal <- function(gene,
         universe <- NULL
     if(!is.null(universe)) {
         if (is.character(universe)) {
-            extID <- intersect(extID, universe)
+            force_universe <- getOption("enrichment_force_universe", FALSE)
+            if (!force_universe) {
+                extID <- intersect(extID, universe)
+            }
         } else {
             ## https://github.com/YuLab-SMU/clusterProfiler/issues/217
             message("`universe` is not in character and will be ignored...")
@@ -129,7 +132,8 @@ enricher_internal <- function(gene,
     p.adj <- p.adjust(Over$pvalue, method=pAdjustMethod)
     qobj <- tryCatch(qvalue(p=Over$pvalue, lambda=0.05, pi0.method="bootstrap"), error=function(e) NULL)
 
-    if (class(qobj) == "qvalue") {
+    # if (class(qobj) == "qvalue") {
+    if (inherits(qobj, "qvalue")) {
         qvalues <- qobj$qvalues
     } else {
         qvalues <- NA
@@ -177,9 +181,15 @@ enricher_internal <- function(gene,
              readable       = FALSE
              )
     if (inherits(USER_DATA, "GSON")) {
-        x@keytype <- USER_DATA@keytype
-        x@organism <- USER_DATA@species
-        x@ontology <- gsub(".*;", "", USER_DATA@gsname)
+        if (!is.null(USER_DATA@keytype)) {
+            x@keytype <- USER_DATA@keytype
+        }
+        if (!is.null(USER_DATA@species)) {
+            x@organism <- USER_DATA@species
+        } 
+        if (!is.null(USER_DATA@gsname)) {
+            x@ontology <- gsub(".*;", "", USER_DATA@gsname)
+        }
     }
     return (x)
 }
