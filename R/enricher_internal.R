@@ -62,7 +62,9 @@ enricher_internal <- function(gene,
     if(!is.null(universe)) {
         if (is.character(universe)) {
             force_universe <- getOption("enrichment_force_universe", FALSE)
-            if (!force_universe) {
+            if (force_universe) {
+                extID <- universe
+            } else {
                 extID <- intersect(extID, universe)
             }
         } else {
