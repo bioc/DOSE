@@ -6,7 +6,7 @@
 \usage{
 mclusterSim(
   clusters,
-  ont = "DO",
+  ont = "HDO",
   organism = "hsa",
   measure = "Wang",
   combine = "BMA"
@@ -15,7 +15,7 @@ mclusterSim(
 \arguments{
 \item{clusters}{A list of gene clusters}
 
-\item{ont}{one of "DO" and "MPO"}
+\item{ont}{one of "HDO", "HPO" and "MPO"}
 
 \item{organism}{organism}
 
@@ -30,14 +30,14 @@ similarity matrix
 Pairwise semantic similarity for a list of gene clusters
 }
 \examples{
-
+\dontrun{
 cluster1 <- c("835", "5261","241")
 cluster2 <- c("578","582")
 cluster3 <- c("307", "308", "317")
 clusters <- list(a=cluster1, b=cluster2, c=cluster3)
 mclusterSim(clusters, measure="Wang")
-
+}
 }
 \author{
-Yu Guangchuang
+Guangchuang Yu
 }

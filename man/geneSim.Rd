@@ -7,7 +7,7 @@
 geneSim(
   geneID1,
   geneID2 = NULL,
-  ont = "DO",
+  ont = "HDO",
   organism = "hsa",
   measure = "Wang",
   combine = "BMA"
@@ -18,7 +18,7 @@ geneSim(
 
 \item{geneID2}{entrez gene vector}
 
-\item{ont}{one of "DO" and "MPO"}
+\item{ont}{one of "HDO" and "MPO"}
 
 \item{organism}{organism}
 
@@ -35,6 +35,10 @@ measuring similarities bewteen two gene vectors.
 \details{
 provide two entrez gene vectors, this function will calculate their similarity.
 }
+\examples{
+g <- c("835", "5261","241", "994")
+geneSim(g)
+}
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://yulab-smu.top}
 }

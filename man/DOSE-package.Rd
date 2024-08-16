@@ -24,7 +24,6 @@ Other contributors:
   \item Li-Gen Wang \email{reeganwang020@gmail.com} [contributor]
   \item Vladislav Petyuk \email{petyuk@gmail.com} [contributor]
   \item Giovanni Dall'Olio \email{giovanni.dallolio@upf.edu} [contributor]
-  \item Erqiang Hu \email{13766876214@163.com} [contributor]
 }
 
 }

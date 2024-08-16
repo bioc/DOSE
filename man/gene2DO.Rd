@@ -4,7 +4,7 @@
 \alias{gene2DO}
 \title{convert Gene ID to DO Terms}
 \usage{
-gene2DO(gene, organism = "hsa", ont = "DO")
+gene2DO(gene, organism = "hsa", ont = "HDO")
 }
 \arguments{
 \item{gene}{entrez gene ID}

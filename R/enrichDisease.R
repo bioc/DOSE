@@ -9,26 +9,9 @@ enrichDisease <- function(gene,
                           readable = FALSE,
                           ontology){
 
-    if (ontology == "NCG") {
-        annoData <- get_NCG_data()
-    } else if (ontology == "DisGeNET") {
-        annoData <- get_DGN_data()
-    } else if (ontology == "snpDisGeNET") {
-        annoData <- get_VDGN_data()
-    } else if (ontology == "DO" || ontology == "DOLite") {
-        if (organism == "hsa") {
-            annoData <- get_DO_data(ontology)
-        } else {
-            annoData <- get_MPO_data(ont = "DO")
-        }
-        
-    } else if (ontology == "MPO") {
-        annoData <- get_MPO_data(ont = "MPO")
-    } else if (ontology == "HPO") {
-        annoData <- get_HPO_data()
-    } else {
-        stop("ontology not supported yet...")
-    }
+    organism <- match.arg(organism, c("hsa", "mm"))
+
+    annoData <- get_anno_data(ontology)
     
     res <- enricher_internal(gene = gene,
                              pvalueCutoff = pvalueCutoff,
@@ -51,50 +34,34 @@ enrichDisease <- function(gene,
     res@ontology <- ontology
 
     if(readable) {
-        res <- setReadable(res, 'org.Hs.eg.db')
+        if (organism == "hsa") {
+            res <- setReadable(res, 'org.Hs.eg.db')
+        } else {
+            res <- setReadable(res, 'org.Mm.eg.db')
+        }
     }
     return(res)
 }
 
-##' @importFrom yulab.utils check_pkg
-##' @importFrom yulab.utils get_fun_from_pkg
-##' @importFrom utils stack
-get_ont_info <- function(ontology) {
-    ## selected columns of `genemap`
-    cols <- c(2, 1)
-    if (ontology == "HDO" || ontology == "DO") {
-        check_pkg("HDO.db")
-        # not used in current version
-    } else if (ontology == "HPO") {
-        check_pkg("HPO.db")
-        genemap <- get_fun_from_pkg("HPO.db", "HPOGENE")
-        ancmap <- get_fun_from_pkg("HPO.db", "HPOANCESTOR")
-        termmap <- get_fun_from_pkg("HPO.db", "HPOTERM")
-    } else if (ontology == "MPO") {
-        check_pkg("MPO.db")
-        genemap <- get_fun_from_pkg("MPO.db", "MPOMPMGI")
-        ancmap <- get_fun_from_pkg("MPO.db", "MPOANCESTOR")
-        termmap <- get_fun_from_pkg("MPO.db", "MPOTERM")
-    } else if (ontology == "MDO") {
-        check_pkg("MPO.db")
-        genemap <- get_fun_from_pkg("MPO.db", "MPOMGIDO")
-        cols <- c(1, 2)
 
-        check_pkg("HDO.db")
-        ancmap <- get_fun_from_pkg("HDO.db", "HDOANCESTOR")
-        termmap <- get_fun_from_pkg("HDO.db", "HDOTERM")
+get_anno_data <- function(ontology) {
+    if (ontology == "NCG") {
+        annoData <- get_NCG_data()
+    } else if (ontology == "DisGeNET") {
+        annoData <- get_DGN_data()
+    } else if (ontology == "snpDisGeNET") {
+        annoData <- get_VDGN_data()
+    } else if (ontology %in% c("HDO", "MPO", "HPO")) {
+        annoData <- get_dose_data(ontology)
+    } else {
+        stop("ontology not supported yet...")
     }
-    # toTable(genemap)[, cols]
-    res <- list(genemap = genemap,
-            cols = cols,
-            ancmap = ancmap,
-            termmap = termmap
-        )
+    
+    return(annoData)
 }
 
 get_dose_data <- function(ontology = "HPO") {
-    if (!exists(".DOSEenv")) .initial()
-    .DOSEEnv <- get(".DOSEEnv", envir = .GlobalEnv)
+    .DOSEEnv <- get_dose_env()
     .env <- sprintf(".%s_DOSE_Env", ontology)
     if (exists(.env, envir=.DOSEEnv)) {
         res <- get(.env, envir = .DOSEEnv)
@@ -104,27 +71,15 @@ get_dose_data <- function(ontology = "HPO") {
     assign(.env, new.env(), envir = .DOSEEnv)
     ret_env <- get(.env, envir = .DOSEEnv)
 
-    ont_info <- get_ont_info(ontology)
-    eg2term <- toTable(ont_info$genemap)[, ont_info$cols] 
-    TERMS <- names(as.list(ont_info$ancmap))
-    i <- eg2term[,2] %in% TERMS
-    eg2term <- eg2term[i,]
-    # TERM2EG <- split(eg2term[,1], eg2term[,2])
-    EG2TERM <- split(as.character(eg2term[,2]), as.character(eg2term[,1]))
+    TERM2ALLEG <- get_ont2allgene(ontology) 
+    EG2ALLTERM <- get_gene2allont(ontology) 
 
-    EG2ALLTERM <- lapply(EG2TERM,
-                       function(i) {
-                           ans <- unlist(mget(i, ont_info$ancmap))
-                           ans <- ans[ !is.na(ans) ]
-                           ans <- c(i, ans)
-                           ans <- unique(ans)
-                           return(ans)
-                       })
+    termmap <- GOSemSim:::get_onto_data(
+        ontology, 
+        table="term", 
+        output = "data.frame")
 
-    EG2ALLTERM.df <- unique(stack(EG2ALLTERM)[, c(2,1)])
-    TERM2ALLEG <- split(as.character(EG2ALLTERM.df[,1]), as.character(EG2ALLTERM.df[,2]))
-
-    PATH2NAME.df <- unique(toTable(ont_info$termmap))
+    PATH2NAME.df <- unique(termmap)
     PATH2NAME <- setNames(PATH2NAME.df[,2], PATH2NAME.df[,1])        
 
     assign("EXTID2PATHID", EG2ALLTERM, envir = ret_env)

@@ -4,7 +4,7 @@
 \alias{doseSim}
 \title{doSim}
 \usage{
-doseSim(DOID1, DOID2, measure = "Wang", ont = "DO")
+doseSim(DOID1, DOID2, measure = "Wang", ont = "HDO")
 }
 \arguments{
 \item{DOID1}{DO term, MPO term or HPO term vector}
@@ -13,7 +13,7 @@ doseSim(DOID1, DOID2, measure = "Wang", ont = "DO")
 
 \item{measure}{one of "Wang", "Resnik", "Rel", "Jiang", "Lin", and "TCSS".}
 
-\item{ont}{one of "DO" and "MPO"}
+\item{ont}{one of "HDO", "HPO" and "MPO"}
 }
 \value{
 score matrix

@@ -6,7 +6,7 @@
 ##' @param cluster1 a vector of gene IDs
 ##' @param cluster2 another vector of gene IDs
 ##' @param organism organism
-##' @param ont one of "DO" and "MPO"
+##' @param ont one of "HDO", "HPO" and "MPO"
 ##' @param measure One of "Resnik", "Lin", "Rel", "Jiang" and "Wang" methods.
 ##' @param combine One of "max", "avg", "rcmax", "BMA" methods, for combining
 ##' @return similarity
@@ -14,17 +14,19 @@
 ##' @export
 ##' @author Yu Guangchuang
 ##' @examples
-##'
+##' \dontrun{
 ##'	cluster1 <- c("835", "5261","241", "994")
 ##'	cluster2 <- c("307", "308", "317", "321", "506", "540", "378", "388", "396")
 ##'	clusterSim(cluster1, cluster2)
-##'
+##' }
 clusterSim <- function(cluster1, 
                        cluster2, 
-                       ont = "DO",
+                       ont = "HDO",
                        organism = "hsa",
                        measure="Wang", 
                        combine="BMA") {
+    if (ont == "DO") ont <- 'HDO'
+
     do1 <- sapply(cluster1, gene2DO, organism = organism)
     do2 <- sapply(cluster2, gene2DO, organism = organism)
 

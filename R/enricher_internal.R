@@ -28,7 +28,6 @@ enricher_internal <- function(gene,
                               qvalueCutoff=0.2,
                               USER_DATA){
 
-    ## query external ID to Term ID
     gene <- as.character(unique(gene))
     qExtID2TermID <- EXTID2TERMID(gene, USER_DATA)
     qTermID <- unlist(qExtID2TermID)
@@ -47,7 +46,6 @@ enricher_internal <- function(gene,
         return(NULL)
     }
 
-    ## Term ID -- query external ID association list.
     qExtID2TermID.df <- data.frame(extID=rep(names(qExtID2TermID),
                                              times=lapply(qExtID2TermID, length)),
                                    termID=qTermID)
@@ -68,22 +66,15 @@ enricher_internal <- function(gene,
                 extID <- intersect(extID, universe)
             }
         } else {
-            ## https://github.com/YuLab-SMU/clusterProfiler/issues/217
             message("`universe` is not in character and will be ignored...")
         }
     }
 
     qTermID2ExtID <- lapply(qTermID2ExtID, intersect, extID)
-
-    ## Term ID annotate query external ID
     qTermID <- unique(names(qTermID2ExtID))
-
-
     termID2ExtID <- TERMID2EXTID(qTermID, USER_DATA)
     termID2ExtID <- lapply(termID2ExtID, intersect, extID)
-
     geneSets <- termID2ExtID
-
     idx <- get_geneSet_index(termID2ExtID, minGSSize, maxGSSize)
 
     if (sum(idx) == 0) {
@@ -104,31 +95,30 @@ enricher_internal <- function(gene,
     M <- M[qTermID]
 
     N <- rep(length(extID), length(M))
-    ## n <- rep(length(gene), length(M)) ## those genes that have no annotation should drop.
     n <- rep(length(qExtID2TermID), length(M))
     args.df <- data.frame(numWdrawn=k-1, ## White balls drawn
                           numW=M,        ## White balls
                           numB=N-M,      ## Black balls
                           numDrawn=n)    ## balls drawn
 
-
-    ## calcute pvalues based on hypergeometric model
     pvalues <- apply(args.df, 1, function(n)
                      phyper(n[1], n[2], n[3], n[4], lower.tail=FALSE)
                      )
 
-    ## gene ratio and background ratio
-    GeneRatio <- apply(data.frame(a=k, b=n), 1, function(x)
-                       paste(x[1], "/", x[2], sep="", collapse="")
-                       )
-    BgRatio <- apply(data.frame(a=M, b=N), 1, function(x)
-                     paste(x[1], "/", x[2], sep="", collapse="")
-                     )
+    GeneRatio <- sprintf("%s/%s", k, n)
+    BgRatio <- sprintf("%s/%s", M, N)
+    RichFactor <- k / M
+    FoldEnrichment <- RichFactor * N / n 
 
-
+    mu <- M * n / N
+    sigma <- mu * (N - n) * (N - M) / N / (N-1)
+    zScore <- (k - mu)/sqrt(sigma)
     Over <- data.frame(ID = as.character(qTermID),
                        GeneRatio = GeneRatio,
                        BgRatio = BgRatio,
+                       RichFactor = RichFactor,
+                       FoldEnrichment = FoldEnrichment,
+                       zScore = zScore, 
                        pvalue = pvalues,
                        stringsAsFactors = FALSE)
 
@@ -204,7 +194,6 @@ get_enriched <- function(object) {
 
     pvalueCutoff <- object@pvalueCutoff
     if (length(pvalueCutoff) != 0) {
-        ## if groupGO result, numeric(0)
         Over <- Over[ Over$pvalue <= pvalueCutoff, ]
         Over <- Over[ Over$p.adjust <= pvalueCutoff, ]
     }
@@ -277,7 +266,6 @@ TERMID2EXTID <- function(term, USER_DATA) {
 TERM2NAME <- function(term, USER_DATA) {
     if (inherits(USER_DATA, "environment")) { 
         PATHID2NAME <- get("PATHID2NAME", envir = USER_DATA)
-        #if (is.null(PATHID2NAME) || is.na(PATHID2NAME)) {
         if (is.null(PATHID2NAME) || all(is.na(PATHID2NAME))) {
             return(as.character(term))
         }
@@ -304,8 +292,6 @@ get_geneSet_index <- function(geneSets, minGSSize, maxGSSize) {
     if (is.na(maxGSSize) || is.null(maxGSSize))
         maxGSSize <- Inf #.Machine$integer.max
 
-    ## index of geneSets in used.
-    ## logical
     geneSet_size <- sapply(geneSets, length)
     idx <-  minGSSize <= geneSet_size & geneSet_size <= maxGSSize
     return(idx)

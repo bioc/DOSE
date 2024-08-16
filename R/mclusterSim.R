@@ -4,26 +4,28 @@
 ##' @title mclusterSim
 ##' @param clusters A list of gene clusters
 ##' @param organism organism
-##' @param ont one of "DO" and "MPO"
+##' @param ont one of "HDO", "HPO" and "MPO"
 ##' @param measure one of "Wang", "Resnik", "Rel", "Jiang", and "Lin".
 ##' @param combine One of "max", "avg", "rcmax", "BMA" methods, for combining semantic similarity scores of multiple DO terms associated with gene/protein.
 ##' @return similarity matrix
 ##' @importFrom GOSemSim combineScores
 ##' @export
-##' @author Yu Guangchuang
+##' @author Guangchuang Yu 
 ##' @examples
-##'
+##' \dontrun{
 ##'	cluster1 <- c("835", "5261","241")
 ##'	cluster2 <- c("578","582")
 ##'	cluster3 <- c("307", "308", "317")
 ##'	clusters <- list(a=cluster1, b=cluster2, c=cluster3)
 ##'	mclusterSim(clusters, measure="Wang")
-##'
+##' }
 mclusterSim <- function(clusters, 
-                        ont = "DO",
+                        ont = "HDO",
                         organism = "hsa",
                         measure="Wang", 
                         combine="BMA") {
+    if (ont == "DO") ont <- 'HDO'
+                        
     cluster_dos <- list()
     for (i in seq_along(clusters)) {
         cluster_dos[[i]] <- unlist(sapply(clusters[[i]], gene2DO, organism = organism))

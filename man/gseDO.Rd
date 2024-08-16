@@ -6,6 +6,7 @@
 \usage{
 gseDO(
   geneList,
+  ont = "HDO",
   organism = "hsa",
   exponent = 1,
   minGSSize = 10,
@@ -21,7 +22,9 @@ gseDO(
 \arguments{
 \item{geneList}{order ranked geneList}
 
-\item{organism}{one of "hsa" and "mmu"}
+\item{ont}{one of "HDO", "HPO" or "MPO"}
+
+\item{organism}{one of "hsa" and "mm"}
 
 \item{exponent}{weight of each step}
 

@@ -5,22 +5,24 @@
 ##' @param geneID1 entrez gene vector
 ##' @param geneID2 entrez gene vector
 ##' @param organism organism
-##' @param ont one of "DO" and "MPO"
+##' @param ont one of "HDO" and "MPO"
 ##' @param measure one of "Wang", "Resnik", "Rel", "Jiang", and "Lin".
 ##' @param combine One of "max", "avg", "rcmax", "BMA" methods, for combining semantic similarity scores of multiple DO terms associated with gene/protein.
 ##' @return score matrix
-##' @importFrom HDO.db HDOPARENTS
-##' @importFrom HDO.db HDOANCESTOR
 ##' @importFrom GOSemSim combineScores
 ##' @export
-##' @author Guangchuang Yu \url{http://ygc.name}
+##' @examples
+##' g <- c("835", "5261","241", "994")
+##' geneSim(g)
+##' @author Guangchuang Yu \url{https://yulab-smu.top}
 geneSim <- function(geneID1,
                     geneID2=NULL,
-                    ont = "DO",
+                    ont = "HDO",
                     organism = "hsa",
                     measure="Wang",
                     combine="BMA") {
 
+    if (ont == "DO") ont <- 'HDO'
 
     DOID1 <- lapply(geneID1, gene2DO, organism = organism, ont = ont)
     if (is.null(geneID2)) {
