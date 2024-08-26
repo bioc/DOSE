@@ -16,8 +16,10 @@ check_gene_id <- function(geneList, geneSets) {
         sg <- unlist(geneSets[1:10])
         sg <- sample(sg, min(length(sg), 6))
         message("--> Expected input gene ID: ", paste0(sg, collapse=','))
-        stop("--> No gene can be mapped....")
+        message("--> No gene can be mapped....")
+        return(FALSE)
     }
+    return(TRUE)
 }
 
 
