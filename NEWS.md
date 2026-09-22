@@ -1,5 +1,6 @@
 # DOSE 4.7.3
 
++ `gseDisease()` now exposes an `eps` argument and forwards it to `enrichit::gsea_gson()`, matching the other GSEA wrappers in the family (2026-09-22, Tue)
 + restore explicit `seed` support on `gseDO()`, `gseNCG()` and `gseDisease()`
   (2026-08-15, Fri)
   - `seed` is forwarded to `enrichit::gsea_gson()`: set it to a number (or TRUE for
