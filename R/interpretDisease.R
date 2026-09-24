@@ -311,6 +311,7 @@ methods::setMethod(
 #'
 #' @return The object is shown to the console and returned invisibly.
 #' @rdname doseInterpretResult-show
+#' @importFrom methods show
 #' @export
 methods::setMethod(
     "show",

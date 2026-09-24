@@ -44,4 +44,4 @@ BugReports: https://github.com/GuangchuangYu/DOSE/issues
 Packaged: 2011-12-28 08:16:14 UTC; root
 biocViews: Annotation, Visualization, MultipleComparison, GeneSetEnrichment,
     Pathways, Software
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

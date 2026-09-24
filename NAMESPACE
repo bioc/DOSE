@@ -28,35 +28,46 @@ exportMethods(summary)
 importClassesFrom(GOSemSim,GOSemSimDATA)
 importClassesFrom(enrichit,enrichResult)
 importClassesFrom(enrichit,gseaResult)
-importFrom(GOSemSim,combineScores)
-importFrom(GOSemSim,get_organism)
-importFrom(GOSemSim,set_auto_update)
-importFrom(GOSemSim,termSim)
-importFrom(enrichit,gsea_gson)
-importFrom(enrichit,ora_gson)
-importFrom(enrichit,setReadable)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,facet_grid)
-importFrom(ggplot2,geom_text)
-importFrom(ggplot2,geom_tile)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,margin)
-importFrom(ggplot2,scale_fill_gradient)
-importFrom(ggplot2,scale_x_discrete)
-importFrom(ggplot2,scale_y_discrete)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_bw)
-importFrom(ggplot2,xlab)
-importFrom(ggplot2,ylab)
+importFrom(GOSemSim,
+  combineScores,
+  get_organism,
+  set_auto_update,
+  termSim
+)
+importFrom(enrichit,
+  gsea_gson,
+  ora_gson,
+  setReadable
+)
+importFrom(ggplot2,
+  aes,
+  element_blank,
+  element_text,
+  facet_grid,
+  geom_text,
+  geom_tile,
+  ggplot,
+  margin,
+  scale_fill_gradient,
+  scale_x_discrete,
+  scale_y_discrete,
+  theme,
+  theme_bw,
+  xlab,
+  ylab
+)
 importFrom(memoise,memoise)
-importFrom(methods,is)
-importFrom(methods,new)
+importFrom(methods,
+  is,
+  new,
+  show
+)
 importFrom(reshape2,melt)
 importFrom(utils,stack)
-importFrom(yulab.utils,load_OrgDb)
-importFrom(yulab.utils,yulab_msg)
+importFrom(yulab.utils,
+  load_OrgDb,
+  yulab_msg
+)
 importMethodsFrom(AnnotationDbi,exists)
 importMethodsFrom(AnnotationDbi,get)
 importMethodsFrom(AnnotationDbi,toTable)
