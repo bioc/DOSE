@@ -1,4 +1,4 @@
-# DOSE 4.7.3.9000
+# DOSE 4.7.4
 
 + `gseDO()`, `gseNCG()` and `gseDisease()` now forward the new `reportNA`
   argument from `enrichit::gsea_gson()` through `...`. Setting
